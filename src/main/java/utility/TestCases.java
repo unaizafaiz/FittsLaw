@@ -1,6 +1,6 @@
 package utility;
 
-public class InputData {
+public class TestCases {
 
     private int globalradius;
     private int localRadius;

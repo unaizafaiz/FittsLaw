@@ -8,27 +8,7 @@ public class CirclePairsData {
    private CirclePoints circleTwo = new CirclePoints();
    private CirclePoints circleOneClicked = new CirclePoints();
    private CirclePoints circleTwoClicked = new CirclePoints();
-    private int dataSetIndex;
-    private int distance;
-    private int targetSize;
-
-
-    public int getDistance() {
-        return distance;
-    }
-
-    public void setDistance(int distance) {
-        this.distance = distance;
-    }
-
-    public int getTargetSize() {
-        return targetSize;
-    }
-
-    public void setTargetSize(int targetSize) {
-        this.targetSize = targetSize;
-    }
-
+   private int dataSetIndex;
    long time;
 
 

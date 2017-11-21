@@ -20,11 +20,8 @@ public class FittsLaw {
 
 
     private void initComponents(JFrame frame) {
-
-
             DrawCircles shape = new DrawCircles(100,25);
             frame.add(shape);
-
     }
 }
 

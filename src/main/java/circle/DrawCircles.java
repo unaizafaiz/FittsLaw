@@ -1,6 +1,6 @@
 package circle;
 
-import utility.InputData;
+import utility.TestCases;
 import utility.CirclePairsData;
 import utility.SavingData;
 import utility.StopWatch;
@@ -25,7 +25,7 @@ public class DrawCircles extends JPanel {
     long oTime, pairTime;
     private int index, i;
     private HashSet<Integer> caseIndex = new HashSet();
-    ArrayList<InputData> inputList = new ArrayList<>();
+    ArrayList<TestCases> inputList = new ArrayList<>();
     ArrayList<CirclePoints> circleData = new ArrayList<>();
     ArrayList<CirclePairsData> dataToBeSaved = new ArrayList<>();
     CirclePairsData pairData = new CirclePairsData();
@@ -45,7 +45,7 @@ public class DrawCircles extends JPanel {
 
     private void createInputList() {
         for(int i=0;i<6;i++){
-            InputData input = new InputData();
+            TestCases input = new TestCases();
             input.setGlobalradius(globalRadius);
             input.setLocalRadius(localRadius);
             inputList.add(input);
@@ -66,9 +66,19 @@ public class DrawCircles extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                //moving to the next combination of targetSize and distance
+                if(trackClickCount==circleLastPoint && iteratingList!=inputList.size()){
+                    initialiseCircle();
+                }
+
+                //If end of data reached then draw gray circle and save data to file
+                if(trackClickCount==circleLastPoint && iteratingList==inputList.size()){
+                    done=true;
+                    circle = new Ellipse2D.Double((250-50),(250-50),100,100);
+                    SavingData saveData = new SavingData(dataToBeSaved);
+                }
 
                 //Adding Index of the input data
-                pairData.setDataSetIndex(index);
                // pairData.setDistance(globalRadius);
                // pairData.setTargetSize(localRadius);
 
@@ -80,10 +90,11 @@ public class DrawCircles extends JPanel {
                 //if mouse click is less than the number of circles to be drawn
                 if(trackClickCount<circleLastPoint+1) {
                     if (circle.contains(e.getPoint())) {
-                        if(trackClickCount==20) {
-                            circle = new Ellipse2D.Double(circleData.get(0).getX() - localRadius, circleData.get(0).getY() - localRadius, localRadius * 2, localRadius * 2);
+                        pairData.setDataSetIndex(index);
+                       /* if(trackClickCount==20) {
+                          //  circle = new Ellipse2D.Double(circleData.get(0).getX() - localRadius, circleData.get(0).getY() - localRadius, localRadius * 2, localRadius * 2);
                         }
-                        else if (trackClickCount%2==0) {
+                        else */if (trackClickCount%2==0) {
                             System.out.println("Mouse clicked at x ="+e.getX()+" y="+e.getY());
                             drawCircleOne(e);
                         }
@@ -95,17 +106,7 @@ public class DrawCircles extends JPanel {
 
                 }
 
-                //moving to the next combination of targetSize and distance
-                if(trackClickCount==circleLastPoint+1 && iteratingList!=inputList.size()){
-                    initialiseCircle();
-                }
 
-                //If end of data reached then draw gray circle and save data to file
-                if(trackClickCount==circleLastPoint+1 && iteratingList==inputList.size()){
-                    done=true;
-                    circle = new Ellipse2D.Double((250-50),(250-50),100,100);
-                    SavingData saveData = new SavingData(dataToBeSaved);
-                }
                 repaint();
 
             }
@@ -123,6 +124,11 @@ public class DrawCircles extends JPanel {
     }
 
     private void initialiseCircle() {
+        pairTime=stopWatch.getElapsedTime()-oTime;
+        pairData.setTime(pairTime);
+        oTime = stopWatch.getElapsedTime();
+        stopWatch.pause();
+        dataToBeSaved.add(pairData);
         trackClickCount=0;
         i=0;
         finRadnomIndex();
