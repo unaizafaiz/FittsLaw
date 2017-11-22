@@ -1,6 +1,6 @@
 # FITTS LAW EXPERIMENT #
 
-CS 522: HCI Homework 5
+CS 522: HCI Homework 3
 By Unaiza Faiz
 
 ### Steps To Run the Program ###
