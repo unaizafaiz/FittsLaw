@@ -1,6 +1,6 @@
 package utility;
 
-public class TestCases {
+public class TargetDistanceCases {
 
     private int globalradius;
     private int localRadius;

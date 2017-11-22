@@ -6,7 +6,7 @@ package circle;
  *
  */
 
-import utility.TestCases;
+import utility.TargetDistanceCases;
 import utility.MovementTimeData;
 import utility.SavingData;
 import utility.StopWatch;
@@ -30,7 +30,7 @@ public class DrawCircles extends JPanel {
     long pairTime;
     private int index, i;
     private HashSet<Integer> caseIndex = new HashSet();
-    ArrayList<TestCases> inputList = new ArrayList<>();
+    ArrayList<TargetDistanceCases> inputList = new ArrayList<>();
     ArrayList<CircleCoordinates> circleData = new ArrayList<>();
     ArrayList<MovementTimeData> dataToBeSaved = new ArrayList<>();
     MovementTimeData pairData = new MovementTimeData();
@@ -57,7 +57,7 @@ public class DrawCircles extends JPanel {
 
     private void createInputList() {
         for(int i=0;i<6;i++){
-            TestCases input = new TestCases();
+            TargetDistanceCases input = new TargetDistanceCases();
             input.setGlobalradius(globalRadius);
             input.setLocalRadius(localRadius);
             inputList.add(input);

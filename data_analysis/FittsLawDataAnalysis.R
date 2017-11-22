@@ -1,5 +1,5 @@
 #Reading Fitts law apparatus data from a file
-dataFL <-read.table("logfile.txt",header = FALSE, sep=":", col.names = c("W","D","MT"))
+dataFL <-read.table("data_dump.log",header = FALSE, sep=":", col.names = c("W","D","MT"))
 dataFL
 
 #compute mean of Movement Time for each case
@@ -34,5 +34,3 @@ linearModTP <- lm(fittsData$TP~fittsData$ID, data=fittsData)
 
 #drawing the line to get regression coeffecient a,b
 abline(linearModTP, col="red")
-
-
