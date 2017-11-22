@@ -18,7 +18,7 @@ public class SavingData {
     private void printData(){
 
         try {
-            File file = new File("logfile.txt");
+            File file = new File("data_dump.log");
             PrintWriter pw = new PrintWriter(new FileOutputStream(file,true));
             int targetSize=0, distance=0;
             for(MovementTimeData p: dataToBeSaved){
@@ -59,7 +59,5 @@ public class SavingData {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }

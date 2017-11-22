@@ -27,7 +27,7 @@ public class DrawCircles extends JPanel {
     private Shape circle;
     private Dimension dim = new Dimension(500, 500);
     StopWatch stopWatch = new StopWatch();
-    long oTime, pairTime;
+    long pairTime;
     private int index, i;
     private HashSet<Integer> caseIndex = new HashSet();
     ArrayList<TestCases> inputList = new ArrayList<>();
@@ -50,6 +50,8 @@ public class DrawCircles extends JPanel {
     /**
      *
      * Creates a list for the 2 targetSize and 3 distance combinations
+     * W = [25, 45]
+     * D = [100,150,200]
      *
      * */
 
@@ -84,7 +86,10 @@ public class DrawCircles extends JPanel {
                 if(trackClickCount==circleLastPoint && iteratingList==inputList.size()){
                     done=true;
                     circle = new Ellipse2D.Double((250-50),(250-50),100,100);
+                    repaint();
                     SavingData saveData = new SavingData(dataToBeSaved);
+                    JOptionPane.showMessageDialog(null,  "End of task. Thank You for participating", "Fitts Law", JOptionPane.INFORMATION_MESSAGE);
+                    System.exit(0);
                 }
 
                 //Increment click count if it's the first click
@@ -155,10 +160,9 @@ public class DrawCircles extends JPanel {
      * Calculates the elapsed time between two pair of targetSircles
      */
     private void getMovementTime() {
-        pairTime=stopWatch.getElapsedTime()-oTime;
+        pairTime=stopWatch.getElapsedTime();
         pairData.setTime(pairTime);
-        oTime = stopWatch.getElapsedTime();
-        stopWatch.pause();
+        stopWatch.stop();
     }
 
     /**
@@ -180,8 +184,7 @@ public class DrawCircles extends JPanel {
 
 
     private void drawCircleTwo() {
-        stopWatch.resume();
-        oTime = stopWatch.getElapsedTime();
+        stopWatch.start();
         int index = i + (numberOfCircles / 2);
         circle = new Ellipse2D.Double(circleData.get(index).getX() - localRadius, circleData.get(index).getY() - localRadius, localRadius * 2, localRadius * 2);
         i++;
