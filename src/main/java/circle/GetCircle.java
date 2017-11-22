@@ -1,5 +1,10 @@
 package circle;
 
+/*
+    Gets all co-ordinates of the required circle
+    Input: Center of circle, radius, number of co-ordinates required
+ */
+
 import java.util.ArrayList;
 
 public class GetCircle {
@@ -15,11 +20,16 @@ public class GetCircle {
         r=radius;
     }
 
-    public ArrayList<CirclePoints> gettingCirclePoints(){
+    /**
+     * Computes the co-ordinates for given circle
+     *
+     * @return Array List of type CircleCoordinates
+     */
+    public ArrayList<CircleCoordinates> gettingCirclePoints(){
 
-        ArrayList<CirclePoints> circleData = new ArrayList<>();
+        ArrayList<CircleCoordinates> circleData = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            CirclePoints circle = new CirclePoints();
+            CircleCoordinates circle = new CircleCoordinates();
             double t = 2 * Math.PI * i / n;
             int x = (int) Math.round(a + r * Math.cos(t));
             int y = (int) Math.round(b + r * Math.sin(t));

@@ -1,7 +1,13 @@
 package circle;
 
+/*
+ * Custom JPanel that implements the iteration of circles for Fitts Law experiment
+ * Executes cases for 2 targetSize and 3 Distance
+ *
+ */
+
 import utility.TestCases;
-import utility.CirclePairsData;
+import utility.MovementTimeData;
 import utility.SavingData;
 import utility.StopWatch;
 
@@ -14,10 +20,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
-//custom panel
 public class DrawCircles extends JPanel {
 
-    private int trackClickCount=0, iteratingList=0, numberOfCircles=20;
+    private int trackClickCount=0, iteratingList=0, numberOfCircles=6;
     private int globalX=250, globalY=250, globalRadius, localRadius;
     private Shape circle;
     private Dimension dim = new Dimension(500, 500);
@@ -26,22 +31,27 @@ public class DrawCircles extends JPanel {
     private int index, i;
     private HashSet<Integer> caseIndex = new HashSet();
     ArrayList<TestCases> inputList = new ArrayList<>();
-    ArrayList<CirclePoints> circleData = new ArrayList<>();
-    ArrayList<CirclePairsData> dataToBeSaved = new ArrayList<>();
-    CirclePairsData pairData = new CirclePairsData();
+    ArrayList<CircleCoordinates> circleData = new ArrayList<>();
+    ArrayList<MovementTimeData> dataToBeSaved = new ArrayList<>();
+    MovementTimeData pairData = new MovementTimeData();
     int circleLastPoint;
     private boolean done=false;
 
     public DrawCircles(int globalRadius, int localRadius) {
        this.globalRadius=globalRadius;
        this.localRadius=localRadius;
+       String intro = "INSTRUCTIONS: Please click on the red circles, until you reach the grey circle which marks the end of data collection. ";
+       JOptionPane.showMessageDialog(null,  intro, "Fitt's Law - Instructions", JOptionPane.INFORMATION_MESSAGE);
        createInputList();
-       /*GetCircle newCircle = new GetCircle(numberOfCircles, globalX,globalY,globalRadius);
-       circleData = newCircle.gettingCirclePoints();
-       circleLastPoint = circleData.size();*/
        initialiseCircle();
        mouseClickListener();
     }
+
+    /**
+     *
+     * Creates a list for the 2 targetSize and 3 distance combinations
+     *
+     * */
 
     private void createInputList() {
         for(int i=0;i<6;i++){
@@ -59,17 +69,16 @@ public class DrawCircles extends JPanel {
         }
     }
 
+
+    /**
+     * Implements mouseListener
+     */
     private void mouseClickListener(){
-      // initialiseCircle();
         stopWatch.start();
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                //moving to the next combination of targetSize and distance
-                if(trackClickCount==circleLastPoint && iteratingList!=inputList.size()){
-                    initialiseCircle();
-                }
 
                 //If end of data reached then draw gray circle and save data to file
                 if(trackClickCount==circleLastPoint && iteratingList==inputList.size()){
@@ -78,28 +87,22 @@ public class DrawCircles extends JPanel {
                     SavingData saveData = new SavingData(dataToBeSaved);
                 }
 
-                //Adding Index of the input data
-               // pairData.setDistance(globalRadius);
-               // pairData.setTargetSize(localRadius);
-
                 //Increment click count if it's the first click
                 if (trackClickCount == 0) {
                     trackClickCount = 1;
                 }
 
-                //if mouse click is less than the number of circles to be drawn
-                if(trackClickCount<circleLastPoint+1) {
+                //moving to the next combination of targetSize and distance
+                if(trackClickCount==circleLastPoint && iteratingList!=inputList.size()){
+                    initialiseCircle();
+                } else {
                     if (circle.contains(e.getPoint())) {
                         pairData.setDataSetIndex(index);
-                       /* if(trackClickCount==20) {
-                          //  circle = new Ellipse2D.Double(circleData.get(0).getX() - localRadius, circleData.get(0).getY() - localRadius, localRadius * 2, localRadius * 2);
-                        }
-                        else */if (trackClickCount%2==0) {
-                            System.out.println("Mouse clicked at x ="+e.getX()+" y="+e.getY());
-                            drawCircleOne(e);
+                        if (trackClickCount%2==0) {
+                            drawCircleOne();
                         }
                         else {
-                            drawCircleTwo(e);
+                            drawCircleTwo();
                         }
                         trackClickCount++;
                     }
@@ -112,83 +115,82 @@ public class DrawCircles extends JPanel {
             }
         });
 
-         /*  addMouseMotionListener(new MouseAdapter() {
-                @Override
-                public void mouseMoved(MouseEvent e) {
-                    super.mouseMoved(e);
-                    long time = stopWatch.getElapsedTime();
-                    System.out.println(" Mouse moving x,y = "+e.getPoint()+" time = "+time);
-
-                }
-            });*/
     }
 
+    /** initialising the UI for the next possible set of targetSize and distance */
+
     private void initialiseCircle() {
-        pairTime=stopWatch.getElapsedTime()-oTime;
-        pairData.setTime(pairTime);
-        oTime = stopWatch.getElapsedTime();
-        stopWatch.pause();
+        //saving last pair time
+        getMovementTime();
         dataToBeSaved.add(pairData);
+
+        //re-intialising new values for next case
         trackClickCount=0;
         i=0;
-        finRadnomIndex();
-        //pair = 0 ;
+        findRandomIndex();
         globalRadius=inputList.get(index).getGlobalradius();
         localRadius=inputList.get(index).getLocalRadius();
         GetCircle newCircle = new GetCircle(numberOfCircles, globalX,globalY,globalRadius);
         circleData = newCircle.gettingCirclePoints();
         circleLastPoint = circleData.size();
         circle = new Ellipse2D.Double(circleData.get(i).getX()-localRadius, circleData.get(i).getY()-localRadius, localRadius * 2, localRadius * 2);
-        pairData.setCircleOne(circleData.get(i));
         pairData.setDataSetIndex(index);
         iteratingList++;
     }
 
-    private void finRadnomIndex() {
+    /** gets a random index for the case to be executed next */
+
+    private void findRandomIndex() {
         Random rand = new Random();
-        //int index;
         index = rand.nextInt(inputList.size());
         while (!caseIndex.add(index)){
             index = rand.nextInt(inputList.size());
-            System.out.println("in while "+index);
         }
         while (caseIndex.add(index));
         for(Integer a: caseIndex){
-            System.out.println("Items in caseIndex"+a);
         }
-        System.out.println("Selected: "+index+"--- "+inputList.get(index).getGlobalradius()+" -- "+inputList.get(index).getLocalRadius());
     }
 
-    private void drawCircleOne(MouseEvent e) {
-        System.out.println("Mouse clicked at x ="+e.getX()+" y="+e.getY());
+    /**
+     * Calculates the elapsed time between two pair of targetSircles
+     */
+    private void getMovementTime() {
         pairTime=stopWatch.getElapsedTime()-oTime;
         pairData.setTime(pairTime);
         oTime = stopWatch.getElapsedTime();
         stopWatch.pause();
-        CirclePoints circleClicked = new CirclePoints();
-        circleClicked.setX(e.getX());
-        circleClicked.setY(e.getY());
-        pairData.setCircleTwoClicked(circleClicked);
-        dataToBeSaved.add(pairData);
-        circle = new Ellipse2D.Double(circleData.get(i).getX() - localRadius, circleData.get(i).getY() - localRadius, localRadius * 2, localRadius * 2);
-        pairData=new CirclePairsData();
-        pairData.setCircleOne(circleData.get(i));
     }
 
-    private void drawCircleTwo(MouseEvent e) {
-        System.out.println("Mouse clicked at x ="+e.getX()+" y="+e.getY());
-        CirclePoints circleClicked = new CirclePoints();
-        circleClicked.setX(e.getX());
-        circleClicked.setY(e.getY());
-        pairData.setCircleOneClicked(circleClicked);
+    /**
+     * draws the first circle in the next pair
+     *
+     */
+    private void drawCircleOne() {
+        getMovementTime();
+        dataToBeSaved.add(pairData);
+        circle = new Ellipse2D.Double(circleData.get(i).getX() - localRadius, circleData.get(i).getY() - localRadius, localRadius * 2, localRadius * 2);
+        pairData=new MovementTimeData();
+    }
+
+    /**
+     *
+     * draws the second circle in the corresponding pair
+     *
+     */
+
+
+    private void drawCircleTwo() {
         stopWatch.resume();
         oTime = stopWatch.getElapsedTime();
         int index = i + (numberOfCircles / 2);
         circle = new Ellipse2D.Double(circleData.get(index).getX() - localRadius, circleData.get(index).getY() - localRadius, localRadius * 2, localRadius * 2);
-        pairData.setCircleTwo(circleData.get(index));
         i++;
     }
 
+    /**
+     * Update the GUI with the new values
+     * @param grphcs
+     */
 
     @Override
     protected void paintComponent(Graphics grphcs) {

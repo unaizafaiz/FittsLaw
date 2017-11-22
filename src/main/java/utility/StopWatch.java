@@ -1,4 +1,6 @@
-package utility;/*
+package utility;
+
+/*
     Copyright (c) 2005, Corey Goldberg
 
     Input.StopWatch.java is free software; you can redistribute it and/or modify

@@ -1,5 +1,14 @@
 package circle;
 
+/*
+ * Copyright (C) 2017 Unaiza Faiz
+ *
+ * Fitts Law Apparatus:
+ * Captures movement time data for different targetSize and distances
+ * Data is then analysed using R
+ *
+ */
+
 import javax.swing.JFrame;
 
 

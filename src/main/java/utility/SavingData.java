@@ -8,36 +8,20 @@ import java.util.ArrayList;
 
 public class SavingData {
 
-    ArrayList<CirclePairsData> mouseClickData;
+    ArrayList<MovementTimeData> dataToBeSaved;
 
-    public SavingData(ArrayList<CirclePairsData> dataToBeSaved) {
-        mouseClickData=dataToBeSaved;
+    public SavingData(ArrayList<MovementTimeData> dataToBeSaved) {
+        this.dataToBeSaved=dataToBeSaved;
         printData();
     }
 
     private void printData(){
-        try {
-            File file = new File("output.txt");
-            PrintWriter pw = new PrintWriter(new FileOutputStream(file,true));
-            for(CirclePairsData p: mouseClickData){
-                pw.append((p.getDataSetIndex()+1)+":"
-                        +p.getCircleOne().getX()+":"+p.getCircleOne().getY()+":"
-                        +p.getCircleTwo().getX()+":"+p.getCircleTwo().getY()+":"
-                        +p.getCircleOneClicked().getX()+":"+p.getCircleOneClicked().getY()+":"
-                        +p.getCircleTwoClicked().getX()+":"+p.getCircleTwoClicked().getY()+":"
-                        +p.getTime());
-            }
-            pw.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         try {
             File file = new File("logfile.txt");
             PrintWriter pw = new PrintWriter(new FileOutputStream(file,true));
             int targetSize=0, distance=0;
-            for(CirclePairsData p: mouseClickData){
+            for(MovementTimeData p: dataToBeSaved){
 
                 switch (p.getDataSetIndex()){
 

@@ -1,6 +1,10 @@
 package circle;
 
-public class CirclePoints {
+/*
+    Saves co-ordinates of a circle
+ */
+
+public class CircleCoordinates {
     int x;
     int y;
 
